@@ -1,10 +1,10 @@
-package com.aaronr92.web_quiz_engine.Controllers;
+package com.aaronr92.web_quiz_engine.controllers;
 
-import com.aaronr92.web_quiz_engine.Auth.UserDetailsImpl;
-import com.aaronr92.web_quiz_engine.Quiz;
-import com.aaronr92.web_quiz_engine.QuizCompleted;
-import com.aaronr92.web_quiz_engine.Service.QuizCompletedService;
-import com.aaronr92.web_quiz_engine.Service.QuizService;
+import com.aaronr92.web_quiz_engine.security.UserDetailsImpl;
+import com.aaronr92.web_quiz_engine.entities.Quiz;
+import com.aaronr92.web_quiz_engine.entities.QuizCompleted;
+import com.aaronr92.web_quiz_engine.service.QuizCompletedService;
+import com.aaronr92.web_quiz_engine.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;

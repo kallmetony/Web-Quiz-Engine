@@ -1,4 +1,4 @@
-package com.aaronr92.web_quiz_engine.Auth;
+package com.aaronr92.web_quiz_engine.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .mvcMatchers("/api/register").permitAll()
-                .mvcMatchers("/actuator/shutdown").permitAll()
+                .mvcMatchers("/actuator/shutdown").permitAll()  //for tests
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .httpBasic();

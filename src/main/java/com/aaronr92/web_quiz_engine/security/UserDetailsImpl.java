@@ -1,5 +1,6 @@
-package com.aaronr92.web_quiz_engine.Auth;
+package com.aaronr92.web_quiz_engine.security;
 
+import com.aaronr92.web_quiz_engine.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
-package com.aaronr92.web_quiz_engine.Service;
+package com.aaronr92.web_quiz_engine.service;
 
-import com.aaronr92.web_quiz_engine.QuizCompleted;
-import com.aaronr92.web_quiz_engine.Repository.QuizCompletedRepository;
+import com.aaronr92.web_quiz_engine.entities.QuizCompleted;
+import com.aaronr92.web_quiz_engine.repository.QuizCompletedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

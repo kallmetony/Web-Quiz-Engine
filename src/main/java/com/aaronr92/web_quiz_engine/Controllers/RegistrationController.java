@@ -1,7 +1,7 @@
-package com.aaronr92.web_quiz_engine.Controllers;
+package com.aaronr92.web_quiz_engine.controllers;
 
-import com.aaronr92.web_quiz_engine.Auth.User;
-import com.aaronr92.web_quiz_engine.Repository.UserRepository;
+import com.aaronr92.web_quiz_engine.entities.User;
+import com.aaronr92.web_quiz_engine.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
