@@ -1,4 +1,4 @@
-package com.aaronr92.web_quiz_engine.entities;
+package com.aaronr92.web_quiz_engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

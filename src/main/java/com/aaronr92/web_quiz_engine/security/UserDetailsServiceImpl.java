@@ -1,6 +1,6 @@
 package com.aaronr92.web_quiz_engine.security;
 
-import com.aaronr92.web_quiz_engine.entities.User;
+import com.aaronr92.web_quiz_engine.entity.User;
 import com.aaronr92.web_quiz_engine.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

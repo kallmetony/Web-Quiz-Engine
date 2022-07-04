@@ -1,6 +1,6 @@
 package com.aaronr92.web_quiz_engine.service;
 
-import com.aaronr92.web_quiz_engine.entities.Quiz;
+import com.aaronr92.web_quiz_engine.entity.Quiz;
 import com.aaronr92.web_quiz_engine.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

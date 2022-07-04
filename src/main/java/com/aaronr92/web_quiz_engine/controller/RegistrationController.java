@@ -1,6 +1,6 @@
-package com.aaronr92.web_quiz_engine.controllers;
+package com.aaronr92.web_quiz_engine.controller;
 
-import com.aaronr92.web_quiz_engine.entities.User;
+import com.aaronr92.web_quiz_engine.entity.User;
 import com.aaronr92.web_quiz_engine.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

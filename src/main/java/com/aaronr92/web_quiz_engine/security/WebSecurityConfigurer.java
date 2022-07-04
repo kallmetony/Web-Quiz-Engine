@@ -28,7 +28,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .mvcMatchers("/api/register").permitAll()
-                .mvcMatchers("/actuator/shutdown").permitAll()  //for tests
+                .mvcMatchers("/actuator/shutdown").denyAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .httpBasic();

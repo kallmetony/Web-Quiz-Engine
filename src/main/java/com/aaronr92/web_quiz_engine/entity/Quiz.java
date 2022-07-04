@@ -1,8 +1,9 @@
-package com.aaronr92.web_quiz_engine.entities;
+package com.aaronr92.web_quiz_engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ReadOnlyProperty
     @Column(name = "quiz_id")
     private long id;
 

@@ -1,6 +1,6 @@
 package com.aaronr92.web_quiz_engine.repository;
 
-import com.aaronr92.web_quiz_engine.entities.QuizCompleted;
+import com.aaronr92.web_quiz_engine.entity.QuizCompleted;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Query;
