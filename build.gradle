@@ -5,7 +5,8 @@ plugins {
 }
 
 group = 'com.aaronr92'
-version = '1.1'
+version = '1.2'
+sourceCompatibility = '11'
 
 configurations {
     compileOnly {
@@ -20,8 +21,7 @@ java {
 
 jar {
     manifest {
-        attributes('Implementation-Title':   'Web Quiz Engine',
-                'Implementation-Version': 1.1)
+        attributes 'Main-Class': 'com.aaronr92.web_quiz_engine.WebQuizEngineApplication'
     }
 }
 

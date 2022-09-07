@@ -178,21 +178,31 @@ Updates the quiz with specified id.
 ## Requirements
 
 * Java 11 or higher
+
+## Compile
+
+1. Go to project directory
+```bash
+  cd my-project
+```
+
+2. Execute gradle tasks
+```bash
+  ./gradlew clean
+  ./gradlew bootJar
+```
+
 ## Run
 
-#### 1. Download web_quiz_service.zip from releases
-
-#### 2. Unzip project
-
-#### 3. Go to the downloaded files directory
+1. Go to the project directory
 
 ```bash
   cd my-project
 ```
 
-#### 4. Start the server
+2. Start the application
 
 ```bash
-  java -jar web_quiz_service.jar
+  java -jar web_quiz_engine-1.2.jar
 ```
 
