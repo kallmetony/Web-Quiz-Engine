@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class QuizCompleted {
+public class SolvedQuiz {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class QuizCompleted {
     @Column
     private String username;
 
-    public QuizCompleted(long id, String username) {
+    public SolvedQuiz(long id, String username) {
         this.id = id;
         this.username = username;
     }

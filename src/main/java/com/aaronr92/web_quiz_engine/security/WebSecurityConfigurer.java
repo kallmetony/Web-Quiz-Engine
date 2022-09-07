@@ -1,6 +1,6 @@
 package com.aaronr92.web_quiz_engine.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,9 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -27,10 +28,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/api/register").permitAll()
-                .mvcMatchers("/actuator/shutdown").denyAll()
+                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/actuator/shutdown").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and().csrf().disable()
+                .and().csrf().disable().cors()
+                .and()
                 .httpBasic();
     }
 

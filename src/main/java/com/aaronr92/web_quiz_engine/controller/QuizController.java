@@ -1,40 +1,46 @@
 package com.aaronr92.web_quiz_engine.controller;
 
-import com.aaronr92.web_quiz_engine.security.UserDetailsImpl;
+import com.aaronr92.web_quiz_engine.dto.SolvedFeedback;
 import com.aaronr92.web_quiz_engine.entity.Quiz;
-import com.aaronr92.web_quiz_engine.entity.QuizCompleted;
-import com.aaronr92.web_quiz_engine.service.QuizCompletedService;
+import com.aaronr92.web_quiz_engine.entity.SolvedQuiz;
+import com.aaronr92.web_quiz_engine.security.UserDetailsImpl;
 import com.aaronr92.web_quiz_engine.service.QuizService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/quizzes")
+@RequiredArgsConstructor
 public class QuizController {
-    @Autowired
-    QuizService quizService;
 
-    @Autowired
-    QuizCompletedService quizCompletedService;
+    private final QuizService quizService;
 
     // GET req
-    @GetMapping("{id}")
-    public ResponseEntity<?> getQuiz(@PathVariable long id) {
-        if (quizService.findQuizById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(quizService.findQuizById(id), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Quiz> getQuiz(@PathVariable long id) {
+        return ResponseEntity.ok(quizService.findQuizById(id));
+    }
+
+    @GetMapping("/find/title")
+    public ResponseEntity<List<Quiz>> findQuizListByTitle(@RequestParam String title) {
+        return ResponseEntity.ok().body(quizService.findQuizListByTitle(title));
+    }
+
+    @GetMapping("/find/user")
+    public ResponseEntity<List<Quiz>> getQuizListByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().body(quizService.findQuizListByUsersEmail(userDetails));
     }
 
     @GetMapping
@@ -42,54 +48,37 @@ public class QuizController {
         return quizService.getPage(page);
     }
 
+
     @GetMapping("/completed")
-    public Slice<QuizCompleted> getSolvedPage(@RequestParam(defaultValue = "0") int page,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println(page);
-        return quizCompletedService.getAllCompletedByUser(userDetails.getUsername(), page);
+    public Slice<SolvedQuiz> getSolvedPage(@RequestParam(defaultValue = "0") int page,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return quizService.getAllCompletedByUser(userDetails.getUsername(), page);
     }
 
     // POST req
     @PostMapping("/{id}/solve")
-    public ResponseEntity<?> checkAnswer(@PathVariable long id,
-                                         @RequestBody Map<String, Set<Integer>> answer,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (quizService.findQuizById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        if (answer.get("answer").containsAll(quizService.findQuizById(id).get().getAnswer()) &&
-                answer.get("answer").size() == quizService.findQuizById(id).get().getAnswer().size()) {
-            Quiz solved = quizService.findQuizById(id).get();
-            quizCompletedService.save(new QuizCompleted(solved.getId(), userDetails.getUsername()));
-            return new ResponseEntity<>(Map.of("success", true, "feedback", "Congratulations, you're right!"), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(Map.of("success", false, "feedback", "Wrong answer! Please, try again."), HttpStatus.OK);
+    public ResponseEntity<SolvedFeedback> checkAnswer(@PathVariable long id,
+                                                      @RequestBody Map<String, Set<Integer>> answer,
+                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(quizService.solveQuiz(id, answer, userDetails));
     }
 
-    @PostMapping
-    public Quiz addQuiz(@Valid @RequestBody Quiz quiz,
-                        Authentication auth) {
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        quiz.setEmail(userDetails.getUsername());
-        if (quiz.getAnswer() == null) {
-            quiz.setAnswer(Set.of());
-        }
-        quizService.save(quiz);
-        return quizService.findQuizById(quiz.getId()).get();
+    @PostMapping("/new")
+    public ResponseEntity<Quiz> addQuiz(@Valid @RequestBody Quiz quiz,
+                                        Authentication auth) {
+        URI uri = URI.create(ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/quizzes/new")
+                .toUriString());
+        return ResponseEntity.created(uri)
+                .body(quizService.addNewQuiz(quiz, (UserDetailsImpl) auth.getPrincipal()));
     }
 
     // DELETE req
     @DeleteMapping("/{id}")
     public void deleteQuiz(@PathVariable long id,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (quizService.findQuizById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        if (userDetails.getUsername().equals(quizService.findQuizById(id).get().getEmail())) {
-            quizService.deleteRecipeById(id);
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        quizService.deleteQuizById(id, userDetails);
     }
 
     // PATCH req
@@ -97,14 +86,6 @@ public class QuizController {
     public void updateQuiz(@RequestBody Quiz quiz,
                            @PathVariable long id,
                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (quizService.findQuizById(id).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        if (Objects.equals(quizService.findQuizById(id).get().getEmail(), userDetails.getUsername())) {
-            quiz.setId(id);
-            quizService.save(quiz);
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
-        }
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        quizService.updateQuiz(id, quiz, userDetails);
     }
 }

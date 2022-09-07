@@ -21,7 +21,7 @@ It can store quizzes to be solved. Users can also post their quizzes.
 ### Register a new user
 
 ```
-POST api/register
+POST api/user/register
 ```
 #### Request body
 
@@ -31,6 +31,24 @@ POST api/register
   "password": "<password>"
 }
 ```
+
+### Verify login-password pair
+
+```
+POST api/user/authenticate
+```
+#### Request body
+
+```json
+{
+  "email": "<email>",
+  "password": "<password>"
+}
+```
+
+#### Description
+
+If correct, returns 200 OK code. If not - 401 UNAUTHORIZED
 
 ### Get a quiz by id
 
@@ -88,7 +106,7 @@ Returns page with only 10 completed quizzes by an authenticated user.
 
 ```json
 {
-  "answer": "<list of the correct answers>"
+  "answer": ["<list of the correct answers>"]
 }
 ```
 
