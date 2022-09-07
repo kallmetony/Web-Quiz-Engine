@@ -192,12 +192,14 @@ Updates the quiz with specified id.
   ./gradlew bootJar
 ```
 
+3. Jar file will be located in the /build/libs folder
+
 ## Run
 
 1. Go to the project directory
 
 ```bash
-  cd my-project
+  cd /build/libs
 ```
 
 2. Start the application
