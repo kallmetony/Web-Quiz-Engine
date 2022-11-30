@@ -22,7 +22,8 @@ public class UserService {
             user.setRole("ROLE_USER");
             userRepository.save(user);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This email is already registered");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "This email is already registered");
         }
     }
 
