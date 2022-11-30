@@ -35,7 +35,7 @@ public class QuizService {
     public List<Quiz> findQuizListByTitle(String title) {
         List<Quiz> quizList = quizRepository.findQuizzesByTitle(title);
         if (quizList == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Quiz not found!");
         }
         return quizList;
@@ -44,7 +44,7 @@ public class QuizService {
     public List<Quiz> findQuizListByUsersEmail(UserDetailsImpl userDetails) {
         List<Quiz> quizList = quizRepository.findQuizzesByEmail(userDetails.getUsername());
         if (quizList == null)
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT,
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "This user does not have his quizzes!");
 
         return quizList;
@@ -80,7 +80,8 @@ public class QuizService {
     public Quiz addNewQuiz(Quiz quiz, UserDetailsImpl userDetails) {
         quiz.setEmail(userDetails.getUsername());
         if (quiz.getAnswer() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Quiz must contain at least one answer!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Quiz must contain at least one answer!");
         }
         return quizRepository.save(quiz);
     }
@@ -100,7 +101,7 @@ public class QuizService {
     public void updateQuiz(long id, Quiz toSave, UserDetailsImpl userDetails) {
         Quiz retrievedQuiz = quizRepository.findQuizById(id);
         if (retrievedQuiz == null) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         if (Objects.equals(retrievedQuiz.getEmail(), userDetails.getUsername())) {
             toSave.setId(id);
